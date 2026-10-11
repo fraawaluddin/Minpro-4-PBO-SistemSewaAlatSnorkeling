@@ -550,18 +550,6 @@ Pengujian ini dilakukan untuk memastikan stok alat bertambah kembali setelah pro
 
 Output menunjukkan bahwa stok SNK01 kembali menjadi 10 unit setelah sebelumnya berkurang dari 10 menjadi 8 unit akibat penyewaan dua unit alat. Hal ini menunjukkan bahwa sistem berhasil memperbarui stok setelah pengembalian dilakukan.
 
-## Cara Menjalankan Program
-
-1. Pastikan JDK dan Apache NetBeans telah terpasang.
-2. Jalankan layanan MySQL melalui Laragon atau lingkungan database yang digunakan.
-3. Buka phpMyAdmin atau perangkat pengelola MySQL lainnya.
-4. Jalankan file `db_sewa_alat.sql` pada database yang belum disiapkan. Jika database sudah berisi data, periksa isi database terlebih dahulu agar tidak terjadi konflik primary key saat memasukkan data awal.
-5. Buka project `SistemSewaAlatSnorkeling` melalui Apache NetBeans.
-6. Pastikan konfigurasi koneksi pada `config/Koneksi.java` sesuai dengan lingkungan MySQL yang digunakan.
-7. Lakukan **Clean and Build** untuk memeriksa proses kompilasi project.
-8. Jalankan program melalui `main/Main.java`.
-9. Pilih fitur yang tersedia melalui menu utama.
-
 ## Kesimpulan
 
 Mini Project 4 mengembangkan Sistem Manajemen Sewa Alat Snorkeling & Diving dari penyimpanan berbasis `ArrayList` menjadi aplikasi yang terintegrasi dengan database MySQL. Penggunaan JDBC, `PreparedStatement`, dan DAO memungkinkan proses pengelolaan data dilakukan melalui database, sedangkan konsep OOP dan MVC membantu menjaga struktur program tetap terorganisir.
