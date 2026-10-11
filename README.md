@@ -91,6 +91,14 @@ README.md
 | `view` | `SewaAlatView` | Menangani tampilan menu dan input pengguna. |
 | `controller` | `SewaAlatController` | Mengatur alur program dan menghubungkan View, Model, serta DAO. |
 
+### Tampilan Struktur Project di NetBeans
+
+Struktur project pada Apache NetBeans dibagi ke dalam beberapa package, yaitu `config`, `controller`, `dao`, `main`, `model`, dan `view`. Setiap package memiliki tanggung jawab masing-masing untuk mengatur koneksi database, logika program, pengelolaan data, objek, serta tampilan aplikasi.
+
+**Gambar 1. Struktur Project Sistem Manajemen Sewa Alat Snorkeling & Diving di NetBeans**
+
+<img width="295" height="521" alt="image" src="https://github.com/user-attachments/assets/f3e6da08-c147-46e5-a299-29a83f805dc1" />
+
 ## Struktur Database
 
 Database yang digunakan dalam program adalah `db_sewa_alat`, dengan tiga tabel utama.
@@ -102,6 +110,12 @@ Database yang digunakan dalam program adalah `db_sewa_alat`, dengan tiga tabel u
 | `penyewaan` | Menyimpan transaksi, jumlah unit, durasi, total biaya, dan status penyewaan. |
 
 Tabel `penyewaan` memiliki relasi dengan tabel `penyewa` dan `alat` melalui foreign key. Relasi tersebut menghubungkan transaksi dengan penyewa serta alat yang disewa.
+
+**Gambar 1. Struktur Database `db_sewa_alat` pada phpMyAdmin**
+
+<img width="190" height="146" alt="image" src="https://github.com/user-attachments/assets/ab9ec9c5-44e1-4a4e-8887-9f85a1076e48" />
+
+Screenshot menunjukkan database `db_sewa_alat` yang memiliki tiga tabel utama, yaitu `alat` untuk menyimpan data alat, `penyewa` untuk menyimpan identitas penyewa, dan `penyewaan` untuk menyimpan transaksi penyewaan.
 
 File `db_sewa_alat.sql` disediakan sebagai berkas SQL untuk membuat database, tabel, dan memasukkan data awal alat. File ini dapat digunakan sebagai dasar untuk menyiapkan database sebelum aplikasi dijalankan.
 
@@ -128,6 +142,12 @@ Secara umum, alur pengolahan data adalah sebagai berikut:
 | 4 | **Pengembalian Alat** | Memproses pengembalian, memperbarui status transaksi, dan menyesuaikan stok. |
 | 5 | **Keluar** | Mengakhiri program. |
 
+Gambar 1. Tampilan Menu Utama Sistem Manajemen Sewa Alat Snorkeling & Diving
+
+Screenshot berikut menunjukkan menu utama aplikasi yang dijalankan melalui console. Pengguna dapat memilih fitur pengelolaan data alat, pembuatan penyewaan, penampilan data penyewaan, pengembalian alat, atau keluar dari program.
+
+<img width="357" height="188" alt="image" src="https://github.com/user-attachments/assets/6c7ab249-0a70-4e80-a776-967458c0f310" />
+
 ## Integrasi Database dengan JDBC
 
 JDBC digunakan agar aplikasi Java dapat berkomunikasi dengan database MySQL. Koneksi database diatur melalui class `Koneksi` dalam package `config`.
@@ -153,6 +173,18 @@ Pengujian dilakukan untuk memastikan aplikasi Java dapat terhubung dengan databa
 `PreparedStatement` digunakan untuk menjalankan perintah SQL dengan parameter. Penerapannya membantu memisahkan perintah SQL dari nilai input yang diberikan pengguna.
 
 Operasi yang menggunakan mekanisme ini mencakup penambahan data, pencarian data berdasarkan ID, perubahan data, dan penghapusan data.
+
+**Gambar 1. Implementasi Query PreparedStatement pada Method tambahAlat()**
+
+<img width="481" height="157" alt="Cuplikan layar 2026-10-12 004022" src="https://github.com/user-attachments/assets/c043f2d6-2a1d-4dea-b363-3fc5e577f5ce" />
+
+Kode tersebut menyusun perintah SQL `INSERT` untuk menambahkan data alat ke database. Placeholder `?` digunakan sebagai parameter, kemudian objek `PreparedStatement` dibuat untuk menjalankan query tersebut.
+
+**Gambar 2. Pengisian Parameter PreparedStatement pada Method tambahAlat()**
+
+<img width="460" height="486" alt="Cuplikan layar 2026-10-12 004052" src="https://github.com/user-attachments/assets/d91e03fe-f17c-402e-98f6-2faf2e3421c5" />
+
+Parameter query diisi menggunakan method seperti `setString()`, `setDouble()`, dan `setInt()`. Sistem juga membedakan alat snorkeling dan diving untuk mengisi atribut khususnya, kemudian menjalankan query melalui `executeUpdate()`.
 
 ### 3. Data Access Object (DAO)
 
@@ -246,6 +278,24 @@ Encapsulation diterapkan dengan membatasi akses terhadap atribut class menggunak
 
 Pendekatan ini membantu menjaga pengelolaan data objek agar dilakukan melalui method yang sesuai.
 
+**Gambar 1. Penerapan Encapsulation melalui Atribut Private**
+
+<img width="308" height="147" alt="image" src="https://github.com/user-attachments/assets/5a8843a7-4151-4c44-b2e1-b7ac924d1760" />
+
+Atribut pada class `AlatSelam` menggunakan access modifier `private`, sehingga atribut tidak dapat diakses secara langsung dari luar class. Pendekatan ini membantu membatasi akses terhadap data objek.
+
+**Gambar 2. Implementasi Method Getter pada Class AlatSelam**
+
+<img width="305" height="77" alt="image" src="https://github.com/user-attachments/assets/9d33d301-9ef1-4849-a54a-bdb4cdf90c0a" />
+
+Method `getNamaAlat()` digunakan untuk memperoleh nilai atribut `namaAlat` melalui method publik, tanpa mengakses atribut tersebut secara langsung dari luar class.
+
+**Gambar 3. Implementasi Method Setter dengan Validasi Data**
+
+<img width="623" height="170" alt="image" src="https://github.com/user-attachments/assets/a2068c6d-78ae-41af-9e53-a8c4c15c8dcc" />
+
+Method `setNamaAlat()` mengatur nilai atribut `namaAlat` dengan memeriksa agar nilai tidak `null` dan tidak kosong setelah spasi di awal atau akhir dihapus. Jika nilai tidak memenuhi ketentuan, sistem menampilkan pesan bahwa nama alat tidak boleh kosong.
+
 ### 2. Inheritance
 
 Inheritance diterapkan melalui hubungan antara `AlatSelam` sebagai class dasar dan dua subclass, yaitu `AlatSnorkeling` dan `AlatDiving`.
@@ -258,19 +308,83 @@ AlatSelam
 
 Kedua subclass mewarisi atribut dan method umum dari `AlatSelam`, serta memiliki atribut tambahan sesuai karakteristik masing-masing jenis alat.
 
+**Gambar 1. Deklarasi Class Induk AlatSelam**
+
+<img width="567" height="27" alt="Cuplikan layar 2026-10-12 005338" src="https://github.com/user-attachments/assets/308e5bb8-6cfa-4ebe-a39a-c9c9f68a85d6" />
+
+Class `AlatSelam` merupakan class induk abstrak yang mengimplementasikan interface `DapatDisewa`. Class ini menjadi dasar bagi class alat snorkeling dan diving.
+
+**Gambar 2. Penerapan Inheritance pada Class AlatSnorkeling**
+
+<img width="492" height="32" alt="Cuplikan layar 2026-10-12 005351" src="https://github.com/user-attachments/assets/2456366e-2a39-41b1-8e90-fed0acdba2b0" />
+
+Class `AlatSnorkeling` menggunakan keyword `extends AlatSelam` untuk mewarisi atribut dan perilaku umum dari class induknya.
+
+**Gambar 3. Penerapan Inheritance pada Class AlatDiving**
+
+<img width="448" height="20" alt="Cuplikan layar 2026-10-12 005401" src="https://github.com/user-attachments/assets/ea2f275b-0b4f-4a2b-985e-f020b28fb02b" />
+
+Class `AlatDiving` juga mewarisi atribut dan perilaku umum dari `AlatSelam`, sehingga kedua jenis alat dapat menggunakan struktur dasar yang sama dengan atribut khusus masing-masing.
+
 ### 3. Polymorphism
 
 Polymorphism memungkinkan objek dari subclass diperlakukan melalui tipe class induknya. Dalam sistem ini, konsep tersebut berkaitan dengan pengelolaan objek alat snorkeling dan diving yang sama-sama diturunkan dari `AlatSelam`.
 
 Method yang di-override pada subclass dapat memberikan implementasi sesuai karakteristik masing-masing jenis alat.
 
+**Gambar 1. Implementasi Method Overriding pada Class AlatSnorkeling**
+
+<img width="743" height="130" alt="Cuplikan layar 2026-10-12 010158" src="https://github.com/user-attachments/assets/d346e6cb-5bc7-4c4e-8caf-6fd3e0bd0821" />
+
+Class `AlatSnorkeling` melakukan overriding terhadap method `tampilkanInfo()` dari class induk `AlatSelam`. Implementasi ini menampilkan data dasar alat serta informasi khusus berupa jenis perlengkapan snorkeling.
+
+**Gambar 2. Implementasi Method Overriding pada Class AlatDiving**
+
+<img width="691" height="122" alt="Cuplikan layar 2026-10-12 010210" src="https://github.com/user-attachments/assets/6a3d729b-f9eb-44ec-b4d9-c6a5e8bef7e4" />
+
+Class `AlatDiving` mengimplementasikan kembali method `tampilkanInfo()` untuk menampilkan data dasar alat serta informasi khusus berupa kapasitas tabung diving.
+
+**Gambar 3. Implementasi Method Overloading pada Class AlatSelam**
+
+<img width="695" height="210" alt="Cuplikan layar 2026-10-12 010335" src="https://github.com/user-attachments/assets/ae562921-d9b8-470e-9827-b7521f52b32c" />
+
+Class `AlatSelam` memiliki dua method bernama `tampilkanInfo()`, yaitu method tanpa parameter dan method dengan parameter `boolean`. Perbedaan parameter tersebut memungkinkan informasi alat ditampilkan dalam bentuk ringkas atau lengkap.
+
 ### 4. Abstraction
 
 Abstraction digunakan untuk memisahkan struktur umum alat dari detail khusus masing-masing jenis alat. Class dasar `AlatSelam` menjadi acuan bagi subclass, sedangkan atribut dan perilaku khusus ditempatkan pada class yang sesuai.
 
+**Gambar 1. Deklarasi Abstract Class AlatSelam**
+
+<img width="577" height="22" alt="image" src="https://github.com/user-attachments/assets/f524bda1-6978-4b78-84a5-e208c5351888" />
+
+Class `AlatSelam` dideklarasikan menggunakan keyword `abstract` sehingga berfungsi sebagai class dasar yang tidak dibuat menjadi objek secara langsung. Class ini menjadi struktur umum bagi class alat snorkeling dan diving.
+
+**Gambar 2. Deklarasi Abstract Method tampilkanInfo()**
+
+<img width="381" height="28" alt="image" src="https://github.com/user-attachments/assets/a145ef7f-5a94-4d3d-8f8f-61c2cec3ddc5" />
+
+Method `tampilkanInfo()` dideklarasikan sebagai abstract method tanpa implementasi pada class induk. Implementasi method tersebut diberikan oleh class turunan `AlatSnorkeling` dan `AlatDiving` sesuai karakteristik masing-masing alat.
+
+### 5. Interface
+
+Interface diterapkan melalui `DapatDisewa`, yang mendefinisikan perilaku untuk memeriksa ketersediaan alat berdasarkan jumlah unit yang diminta. Class `AlatSelam` mengimplementasikan interface tersebut, sedangkan class `AlatSnorkeling` dan `AlatDiving` menyediakan implementasi method sesuai kebutuhan sistem.
+
+**Gambar 1. Implementasi Interface DapatDisewa**
+
+<img width="456" height="93" alt="image" src="https://github.com/user-attachments/assets/b28eb199-667e-4200-b7e0-884923934c0b" />
+
+Interface `DapatDisewa` menjadi kontrak yang harus dipenuhi oleh class yang mengimplementasikannya. Dalam program ini, method `cekKetersediaan(int jumlahUnit)` digunakan untuk memeriksa apakah jumlah alat yang diminta tersedia.
+
 ## Penerapan MVC (Model-View-Controller)
 
 MVC digunakan untuk memisahkan tanggung jawab program.
+
+**Gambar 1. Struktur Package untuk Penerapan MVC**
+
+<img width="290" height="521" alt="image" src="https://github.com/user-attachments/assets/aab3e1ae-41b5-449f-bfc0-0743235c50c9" />
+
+Struktur project menunjukkan pemisahan tanggung jawab melalui package `model`, `view`, dan `controller`. Package `model` merepresentasikan data dan objek sistem, package `view` menangani tampilan serta input pengguna, sedangkan package `controller` mengatur alur program. Package `dao` mendukung proses akses database.
 
 ### Model
 
