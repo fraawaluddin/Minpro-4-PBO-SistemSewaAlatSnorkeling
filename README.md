@@ -136,6 +136,18 @@ JDBC digunakan agar aplikasi Java dapat berkomunikasi dengan database MySQL. Kon
 
 Class `Koneksi` menyediakan method `getConnection()` untuk membuat koneksi menggunakan `DriverManager`. Konfigurasi tersebut menggunakan URL database, username, dan password MySQL.
 
+Gambar 1. Implementasi Koneksi Database
+
+<img width="665" height="611" alt="image" src="https://github.com/user-attachments/assets/c6bea206-b85b-44ef-aa30-28c3f971fe42" />
+
+Class Koneksi digunakan untuk menghubungkan aplikasi Java dengan database MySQL melalui JDBC. Method getConnection() memanfaatkan DriverManager untuk membuat koneksi, sedangkan SQLException digunakan untuk menangani kesalahan koneksi.
+
+Gambar 2. Hasil Pengujian Koneksi Database
+
+<img width="948" height="457" alt="image" src="https://github.com/user-attachments/assets/fe6d89ff-9364-4f9c-b0b2-dee6ff447e3d" />
+
+Pengujian dilakukan untuk memastikan aplikasi Java dapat terhubung dengan database MySQL db_sewa_alat. Output menunjukkan pesan BERHASIL: Database siap digunakan. dan BUILD SUCCESS, yang menandakan pengujian koneksi selesai dengan sukses.
+
 ### 2. PreparedStatement
 
 `PreparedStatement` digunakan untuk menjalankan perintah SQL dengan parameter. Penerapannya membantu memisahkan perintah SQL dari nilai input yang diberikan pengguna.
@@ -149,6 +161,48 @@ Pola DAO digunakan untuk memisahkan operasi database dari logika utama program.
 - `AlatDAO` menangani operasi CRUD (*Create, Read, Update, Delete*) pada data alat.
 - `PenyewaDAO` menangani penyimpanan dan pembuatan ID penyewa.
 - `PenyewaanDAO` menangani transaksi penyewaan, pencarian detail transaksi, perubahan status, dan pengambilan daftar penyewaan.
+
+Gambar 1. Implementasi Method getAllAlat()
+
+<img width="460" height="812" alt="image" src="https://github.com/user-attachments/assets/6370104a-6b4d-407c-9459-ecdac7bc9271" />
+
+Method getAllAlat() digunakan untuk mengambil seluruh data alat dari tabel alat pada database MySQL. Data dibaca menggunakan ResultSet, kemudian diproses berdasarkan jenis alat. Sistem membentuk objek AlatSnorkeling atau AlatDiving sesuai nilai jenis_alat, lalu menambahkan objek tersebut ke dalam daftar daftarAlat untuk dikembalikan kepada pemanggil.
+
+Gambar 2. Hasil Pengujian Menampilkan Data Alat
+
+<img width="382" height="766" alt="image" src="https://github.com/user-attachments/assets/81ba3733-95f1-4cab-8132-dba17822eaa0" />
+
+Output program menunjukkan bahwa sistem berhasil mengambil dan menampilkan data alat dari database MySQL. Data yang ditampilkan mencakup Tabung Diving (DIV01) dengan stok 5 unit dan Set Snorkeling (SNK01) dengan stok 10 unit, beserta tarif, kondisi, dan atribut khusus masing-masing alat.
+
+Gambar 3. Implementasi Method cariAlatById()
+
+<img width="557" height="793" alt="image" src="https://github.com/user-attachments/assets/f1a90621-fee7-450e-89aa-d414db0011c6" />
+
+Method cariAlatById() digunakan untuk mencari data alat berdasarkan ID alat. Sistem menjalankan query menggunakan PreparedStatement, kemudian membaca hasil pencarian melalui ResultSet. Jika data ditemukan, sistem membentuk objek AlatSnorkeling atau AlatDiving sesuai nilai jenis_alat. Jika data tidak ditemukan, method mengembalikan nilai null.
+
+Gambar 4. Implementasi Method tambahAlat()
+
+<img width="520" height="813" alt="image" src="https://github.com/user-attachments/assets/b91d2936-1b11-47b6-86c1-d9722a8fbff1" />
+
+Method tambahAlat() digunakan untuk menambahkan data alat ke tabel alat pada database MySQL. Data dimasukkan menggunakan perintah SQL INSERT dengan parameter PreparedStatement. Sistem menentukan jenis alat, yaitu snorkeling atau diving, untuk menyimpan atribut khusus yang sesuai. Jika proses penyimpanan berhasil, method mengembalikan nilai true.
+
+Gambar 5. Implementasi Method ubahAlat()
+
+<img width="580" height="742" alt="image" src="https://github.com/user-attachments/assets/7f2446af-3b9b-4b9c-a0e1-61c8dec63a9e" />
+
+Method ubahAlat() digunakan untuk memperbarui informasi alat berdasarkan ID alat. Sistem menjalankan perintah SQL UPDATE menggunakan PreparedStatement untuk mengubah nama, ukuran, tarif, kondisi, stok, dan atribut khusus alat. Kondisi WHERE id_alat = ? memastikan perubahan dilakukan pada data alat yang sesuai dengan ID yang diberikan.
+
+Gambar 6. Implementasi Method hapusAlat()
+
+<img width="580" height="292" alt="image" src="https://github.com/user-attachments/assets/990c63a0-d4a3-47b3-90aa-1ca42cb59d0c" />
+
+Method hapusAlat() digunakan untuk menghapus data alat dari tabel alat berdasarkan ID alat. Sistem menjalankan perintah SQL DELETE menggunakan PreparedStatement. Jika penghapusan berhasil, method mengembalikan nilai true, sedangkan jika terjadi kesalahan SQL, sistem menampilkan pesan kesalahan dan mengembalikan nilai false.
+
+Gambar 7. Implementasi Method updateJumlahTersedia()
+
+<img width="630" height="322" alt="image" src="https://github.com/user-attachments/assets/a7af920c-2cdc-4bd4-a49e-00f1df9bf0f9" />
+
+Method updateJumlahTersedia() digunakan untuk memperbarui jumlah stok alat pada tabel alat berdasarkan ID alat. Sistem menjalankan perintah SQL UPDATE dengan PreparedStatement, kemudian mengisi parameter jumlah stok dan ID alat. Method mengembalikan nilai true apabila pembaruan berhasil dilakukan.
 
 Dengan pemisahan tersebut, controller tidak perlu menuliskan seluruh perintah SQL secara langsung untuk setiap operasi database.
 
@@ -235,6 +289,150 @@ Package `controller` berisi `SewaAlatController`, yang mengatur alur program, me
 Ketika pengguna memilih menu, View meneruskan input untuk diproses oleh Controller. Controller kemudian menggunakan DAO untuk menjalankan operasi database dan mengolah hasilnya sebelum ditampilkan kembali kepada pengguna.
 
 Pemisahan ini membuat tanggung jawab tampilan, logika program, representasi data, dan akses database lebih terorganisir.
+
+## Dokumentasi Pengujian Program
+
+Bagian ini menampilkan hasil pengujian Sistem Manajemen Sewa Alat Snorkeling & Diving. Pengujian dilakukan untuk memastikan koneksi database, pengelolaan data alat, transaksi penyewaan, dan proses pengembalian berjalan sesuai fungsinya.
+
+### 1. Pengujian Koneksi Database
+
+Pengujian koneksi dilakukan untuk memastikan aplikasi Java berhasil terhubung dengan database MySQL `db_sewa_alat`.
+
+**Gambar 1. Hasil Pengujian Koneksi Database**
+
+<img width="942" height="462" alt="01-koneksi-database" src="https://github.com/user-attachments/assets/5f9db083-be72-48ab-8e0f-b8dbf5710269" />
+
+Output menunjukkan bahwa aplikasi berhasil terhubung dengan database MySQL dan pengujian selesai dengan status BUILD SUCCESS.
+
+### 2. Pengujian Menampilkan Data Alat
+
+Pengujian ini memastikan sistem dapat mengambil dan menampilkan data alat yang tersimpan dalam database MySQL.
+
+**Gambar 2. Hasil Pengujian Menampilkan Data Alat**
+
+<img width="367" height="797" alt="02-data-alat-database" src="https://github.com/user-attachments/assets/3cac9c9e-094f-406f-ab96-f48c32f56144" />
+
+Output menampilkan data Tabung Diving (DIV01) dengan stok 5 unit dan Set Snorkeling (SNK01) dengan stok 10 unit, termasuk tarif dan atribut masing-masing alat.
+
+### 3. Pengujian Penambahan Data Alat
+
+Pengujian ini dilakukan untuk memastikan sistem dapat menambahkan data alat snorkeling baru ke dalam database MySQL.
+
+**Gambar 3. Hasil Pengujian Penambahan Data Alat**
+
+<img width="570" height="460" alt="03-tambah-alat" src="https://github.com/user-attachments/assets/70a0c2fc-d97a-4623-8ee1-e6048d5f8978" />
+
+Output menunjukkan bahwa data alat dengan ID `SNK02`, nama Set Snorkeling Anak, berhasil ditambahkan ke database.
+
+### 4. Pengujian Verifikasi Data Setelah Penambahan
+
+Pengujian ini dilakukan untuk memastikan data alat yang baru ditambahkan benar-benar tersimpan dan dapat ditampilkan kembali dari database.
+
+**Gambar 4. Hasil Verifikasi Data Setelah Penambahan**
+
+<img width="337" height="787" alt="04-verifikasi-data-alat" src="https://github.com/user-attachments/assets/626784d9-314d-4071-8394-4c038a82690f" />
+
+Output menunjukkan bahwa alat dengan ID `SNK02` dan nama Set Snorkeling Anak muncul dalam daftar alat. Hal ini membuktikan bahwa data hasil penambahan berhasil dibaca kembali dari database.
+
+### 5. Pengujian Perubahan Data Alat
+
+Pengujian ini dilakukan untuk memastikan sistem dapat memperbarui informasi alat yang sudah tersimpan dalam database berdasarkan ID alat.
+
+**Gambar 5. Hasil Pengujian Perubahan Data Alat**
+
+<img width="553" height="326" alt="05-ubah-alat" src="https://github.com/user-attachments/assets/6d031e2f-1ede-49fb-9970-62adad234092" />
+
+Output menunjukkan bahwa data alat `SNK02` berhasil diubah menjadi Set Snorkeling Anak Premium dengan tarif Rp14.000 per hari, stok 7 unit, dan kondisi Baik.
+
+### 6. Pengujian Verifikasi Perubahan Data Alat
+
+Pengujian ini dilakukan untuk memastikan perubahan data alat berhasil disimpan dan ditampilkan kembali dari database.
+
+**Gambar 6. Hasil Verifikasi Perubahan Data Alat**
+
+<img width="362" height="722" alt="06-verifikasi-ubah-alat" src="https://github.com/user-attachments/assets/52154152-89ee-4b55-b59d-2981b3eec391" />
+
+Output menunjukkan bahwa data `SNK02` telah berubah menjadi Set Snorkeling Anak Premium dengan tarif Rp14.000 per hari dan stok 7 unit. Hasil ini membuktikan bahwa perubahan data berhasil tersimpan dan dapat dibaca kembali dari database.
+
+### 7. Pengujian Penghapusan Data Alat
+
+Pengujian ini dilakukan untuk memastikan sistem dapat menghapus data alat berdasarkan ID alat yang dipilih dari database MySQL.
+
+**Gambar 7. Hasil Pengujian Penghapusan Data Alat**
+
+<img width="275" height="797" alt="07-hapus-alat" src="https://github.com/user-attachments/assets/6b2e16dd-8c2a-4849-93f1-5ed89937a299" />
+
+Output menunjukkan bahwa data alat dengan ID `SNK02` berhasil dihapus dari database. Sistem menampilkan pesan keberhasilan setelah operasi penghapusan selesai dilakukan.
+
+### 8. Pengujian Pembuatan Transaksi Penyewaan
+
+Pengujian ini dilakukan untuk memastikan sistem dapat menyimpan transaksi penyewaan alat, menghitung total biaya, dan memperbarui stok berdasarkan jumlah unit yang disewa.
+
+**Gambar 8. Hasil Pengujian Pembuatan Transaksi Penyewaan**
+
+<img width="282" height="628" alt="08-buat-penyewaan" src="https://github.com/user-attachments/assets/64a25d4a-acd9-4654-ad2a-5c59739abca5" />
+
+Output menunjukkan bahwa transaksi `SW0002` berhasil dibuat untuk dua unit Set Snorkeling dengan durasi penyewaan tiga hari. Total biaya yang tercatat adalah Rp90.000.
+
+### 9. Pengujian Menampilkan Data Penyewaan
+
+Pengujian ini dilakukan untuk memastikan sistem dapat mengambil dan menampilkan daftar transaksi penyewaan yang tersimpan dalam database MySQL.
+
+**Gambar 9. Hasil Pengujian Menampilkan Data Penyewaan**
+
+<img width="325" height="492" alt="09-data-penyewaan" src="https://github.com/user-attachments/assets/cfd582b2-fa78-4b2f-beac-47b5036f0810" />
+
+Output menampilkan daftar transaksi penyewaan beserta ID transaksi, identitas penyewa, alat yang disewa, jumlah unit, durasi, total biaya, dan status transaksi. Data tersebut menunjukkan bahwa transaksi dapat dibaca kembali dari database.
+
+### 10. Pengujian Stok Setelah Penyewaan
+
+Pengujian ini dilakukan untuk memastikan stok alat otomatis berkurang sesuai jumlah unit yang disewa setelah transaksi berhasil dibuat.
+
+**Gambar 10. Hasil Verifikasi Stok Setelah Penyewaan**
+
+<img width="291" height="715" alt="10-verifikasi-stok-penyewaan" src="https://github.com/user-attachments/assets/717f2018-cc57-40f2-bdd8-25d1189ae791" />
+
+Output menunjukkan stok SNK01 berkurang dari 10 menjadi 8 unit setelah dua unit alat disewakan. Hal ini menunjukkan bahwa sistem memperbarui stok berdasarkan jumlah unit dalam transaksi penyewaan.
+
+### 11. Pengujian Pengembalian Alat
+
+Pengujian ini dilakukan untuk memastikan sistem dapat memproses pengembalian alat yang sebelumnya disewa dan memperbarui status transaksi serta stok alat.
+
+**Gambar 11. Hasil Pengujian Pengembalian Alat**
+
+<img width="278" height="432" alt="11-pengembalian-alat" src="https://github.com/user-attachments/assets/b6f3e86c-a750-4dfc-a265-5f75b8195818" />
+
+Output menunjukkan bahwa proses pengembalian alat berhasil dilakukan. Sistem menampilkan pesan bahwa alat berhasil dikembalikan dan stok alat telah diperbarui.
+
+### 12. Pengujian Verifikasi Status Pengembalian
+
+Pengujian ini dilakukan untuk memastikan status transaksi berubah setelah alat berhasil dikembalikan dan perubahan tersebut tersimpan di database.
+
+**Gambar 12. Hasil Verifikasi Status Pengembalian**
+
+<img width="328" height="491" alt="12-verifikasi-status-pengembalian" src="https://github.com/user-attachments/assets/5ef04618-b71f-4357-b1a3-fd9c56cef9b2" />
+
+Output menunjukkan bahwa transaksi SW0002 memiliki status `DIKEMBALIKAN`. Hal ini membuktikan bahwa sistem berhasil memperbarui status transaksi setelah proses pengembalian alat dilakukan.
+
+### 13. Pengujian Validasi Pengembalian Ganda
+
+Pengujian ini dilakukan untuk memastikan sistem dapat menolak proses pengembalian apabila transaksi penyewaan sudah berstatus dikembalikan.
+
+**Gambar 13. Hasil Pengujian Validasi Pengembalian Ganda**
+
+<img width="360" height="317" alt="13-validasi-pengembalian-ganda" src="https://github.com/user-attachments/assets/387f0d9e-b5b9-46e6-b73e-75ac201d1c77" />
+
+Output menampilkan pesan `Penyewaan sudah dikembalikan` ketika pengembalian dilakukan kembali pada transaksi yang sama. Hal ini menunjukkan bahwa sistem memiliki validasi untuk mencegah pengembalian ganda pada satu transaksi.
+
+### 14. Pengujian Verifikasi Stok Setelah Pengembalian
+
+Pengujian ini dilakukan untuk memastikan stok alat bertambah kembali setelah proses pengembalian berhasil dilakukan.
+
+**Gambar 14. Hasil Verifikasi Stok Setelah Pengembalian**
+
+<img width="363" height="751" alt="14-verifikasi-stok-setelah-pengembalian" src="https://github.com/user-attachments/assets/8bc48c31-c6a3-4c31-8592-fdb3c89fc19e" />
+
+Output menunjukkan bahwa stok SNK01 kembali menjadi 10 unit setelah sebelumnya berkurang dari 10 menjadi 8 unit akibat penyewaan dua unit alat. Hal ini menunjukkan bahwa sistem berhasil memperbarui stok setelah pengembalian dilakukan.
 
 ## Cara Menjalankan Program
 
