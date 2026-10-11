@@ -56,6 +56,7 @@ SistemSewaAlatSnorkeling
     │   ├── AlatSelam.java
     │   ├── AlatSnorkeling.java
     │   ├── AlatDiving.java
+    │   ├── DapatDisewa.java
     │   ├── Penyewa.java
     │   └── Penyewaan.java
     ├── dao
@@ -83,6 +84,7 @@ README.md
 | `model` | `AlatSelam` | Menjadi class dasar untuk objek alat selam. |
 | `model` | `AlatSnorkeling` | Merepresentasikan alat snorkeling beserta atribut khususnya. |
 | `model` | `AlatDiving` | Merepresentasikan alat diving beserta atribut khususnya. |
+| `model` | `DapatDisewa` | Mendefinisikan kontrak method cekKetersediaan(int jumlahUnit) untuk memeriksa ketersediaan alat. |
 | `model` | `Penyewa` | Menyimpan data penyewa. |
 | `model` | `Penyewaan` | Merepresentasikan data transaksi penyewaan. |
 | `dao` | `AlatDAO` | Menangani operasi database untuk data alat. |
